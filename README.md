@@ -1,2 +1,2 @@
 # SpringStore
-Repository for me to review my microservices skill and to do something in my freetime
+Repository using Vertical Slice Architecture to review my microservices skill and to do something in my freetime
