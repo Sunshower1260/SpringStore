@@ -4,14 +4,17 @@ import com.example.SpringStore.core.exception.AppException;
 import com.example.SpringStore.core.exception.ErrorCode;
 import com.example.SpringStore.core.shared.model.User;
 import com.example.SpringStore.features.authentication.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RegisterService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public RegisterService(UserRepository userRepository) {
+    public RegisterService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public RegisterResponse execute(RegisterRequest request) {
@@ -23,13 +26,13 @@ public class RegisterService {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
 
-        // Mô phỏng mã hóa mật khẩu đơn giản
-        String dummyHashedPassword = "sha256_" + request.getPassword();
+        // Mã hóa mật khẩu thực tế bằng BCrypt
+        String encryptedPassword = passwordEncoder.encode(request.getPassword());
 
         User user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
-                .password(dummyHashedPassword)
+                .password(encryptedPassword)
                 .fullName(request.getFullName())
                 .build();
 
