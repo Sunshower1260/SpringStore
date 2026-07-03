@@ -17,13 +17,12 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    // Khóa bí mật mặc định an toàn 256-bit đề phòng trường hợp chưa cấu hình
-    private static final String DEFAULT_SECRET = "9c07c507-28bd-4504-9024-cc2eccceddfb-SpringStore-Modern-Secret-Key-2026";
-    
     // Thời hạn 24 giờ (miligiây)
     private static final long EXPIRATION_TIME = 86400000;
 
-    @Value("${app.jwt.secret:" + DEFAULT_SECRET + "}")
+    // Secret key đọc từ application.properties (hoặc env var APP_JWT_SECRET)
+    // KHÔNG hardcode secret trong source code - xem application.properties
+    @Value("${app.jwt.secret}")
     private String secretKeyString;
 
     private SecretKey getSigningKey() {
